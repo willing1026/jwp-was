@@ -1,14 +1,14 @@
-package http;
+package http.request;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RequestLineParserTest {
+class RequestLineTest {
 	@Test
 	void parseGetMethod() {
-		RequestLine requestLine = RequestLineParser.parseRequestLine("GET /users HTTP/1.1");
+		RequestLine requestLine = new RequestLine("GET /users HTTP/1.1");
 		assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET.toString());
 		assertThat(requestLine.getPath()).isEqualTo("/users");
 		assertThat(requestLine.getProtocol()).isEqualTo("HTTP");
@@ -17,7 +17,7 @@ public class RequestLineParserTest {
 
 	@Test
 	void parseGetMethodWithQueryString() {
-		RequestLine requestLine = RequestLineParser.parseRequestLine("GET /users?userId=javajigi&password=password&name=JaeSung HTTP/1.1");
+		RequestLine requestLine = new RequestLine("GET /users?userId=javajigi&password=password&name=JaeSung HTTP/1.1");
 		assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET.toString());
 		assertThat(requestLine.getPath()).isEqualTo("/users");
 		assertThat(requestLine.getProtocol()).isEqualTo("HTTP");
@@ -27,7 +27,7 @@ public class RequestLineParserTest {
 
 	@Test
 	void parsePostMethod() {
-		RequestLine requestLine = RequestLineParser.parseRequestLine("POST /users HTTP/1.1");
+		RequestLine requestLine = new RequestLine("POST /users HTTP/1.1");
 		assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.POST.toString());
 		assertThat(requestLine.getPath()).isEqualTo("/users");
 		assertThat(requestLine.getProtocol()).isEqualTo("HTTP");
@@ -35,8 +35,9 @@ public class RequestLineParserTest {
 	}
 
 	@Test
-	void parseProtocol() {
-		Protocol protocol = RequestLineParser.parseProtocol("HTTP/1.1");
-		assertThat(protocol).isEqualTo(new Protocol("HTTP", "1.1"));
+	void getTemplatePath() {
+		RequestLine requestLine = new RequestLine("GET /index.html HTTP/1.1");
+		assertThat(requestLine.getMethod()).isEqualTo(HttpMethod.GET.toString());
+		assertThat(requestLine.getTemplatePath()).isEqualTo("./templates/index.html");
 	}
 }
